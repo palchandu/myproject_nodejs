@@ -15,6 +15,7 @@ mongoose.connect('mongodb://localhost/getwebsoftware')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
+var postsRouter=require('./routes/posts');
 var app = express();
 app.use(cors());
 // view engine setup
@@ -32,6 +33,7 @@ app.use(bodyParser.json({limit: '50mb',extended: true}));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/category',categoryRouter);
+app.use('/posts',postsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
