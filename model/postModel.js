@@ -4,7 +4,8 @@ var postSchema=new Schema({
     title:{type:String,required:true},
     content:{ type:String,required:true},
     slug:{ type:String,required:true},
-    author:{ type:Schema.Types.ObjectId,ref:'users'}
+    author:{ type:Schema.Types.ObjectId,ref:'users'},
+    comments_id:[{ type:Schema.Types.ObjectId,ref:'comment'}]
 });
 
 module.exports=mongoose.model('Posts',postSchema);

@@ -20,7 +20,7 @@ postController.insert_post=function(req,res){
 }
 
 postController.post_list=function(req,res){
-    Posts.find({}).populate('author').exec().then(function(result){
+    Posts.find({}).populate('author').populate('comments_id').exec().then(function(result){
         res.json({status:200,message:"Posts lists",data:result});
     }).catch(function(error){
         res.json({status:202,message:"Something wrong!"});
