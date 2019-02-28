@@ -12,7 +12,8 @@ commentController.add_comment=function(req,res){
         post_id:post_id
     });
     newComment.save().then(function(result){
-         Posts.findOneAndUpdate(post_id,
+         Posts.update(
+             {_id:post_id},
              {$push: {comments_id: result._id}},
              {safe: true, upsert: true},
              function(err,doc){
@@ -29,5 +30,26 @@ commentController.add_comment=function(req,res){
     });
 }
 
+commentController.remove_comment=function(req,res){
+    var post_id=req.body.pid;
+    var comment_id=req.body.cid;
+    Posts.update({_id:post_id},{$pull:{comments_id:comment_id}},{safe:true}).then(function(result){
+        res.json({status:200,message:"Successfully comment removed",doc:result});
+    }).catch(function(err){
+        res.json({status:201,message:"Something wrong!",doc:err});
+    });
+}
 
+commentController.updateStatus=function(req,res){
+    var comment_id=req.body.id;
+    Comment.findOneAndUpdate(
+        {_id:comment_id},{status:'Y'},
+        function(err,doc){
+        if(err){
+            res.json({status:201,message:"Something wrong!",doc:err});
+        }else{
+            res.json({status:200,message:"Successfully comment removed"});
+        }
+    });
+}
 module.exports=commentController;

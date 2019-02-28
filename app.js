@@ -8,7 +8,7 @@ var cors = require('cors');
 /*mongoose and connect */
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/getwebsoftware')
+mongoose.connect('mongodb+srv://chandra:chandra@1991@cluster0-jjiso.mongodb.net/test?retryWrites=true')
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
 
