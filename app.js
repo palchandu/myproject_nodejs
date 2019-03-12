@@ -5,10 +5,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser=require('body-parser');
 var cors = require('cors');
+var verify=require('./middleware/Auth');
 /*mongoose and connect */
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://chandra:chandra@1991@cluster0-jjiso.mongodb.net/test?retryWrites=true')
+mongoose.connect('mongodb://localhost/getwebsoftware')
+//mongoose.connect('mongodb+srv://chandra:chandra@1991@cluster0-jjiso.mongodb.net/test?retryWrites=true')
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
 
@@ -30,9 +32,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ limit: '50mb',extended: true }));
 app.use(bodyParser.json({limit: '50mb',extended: true}));
-
+//app.use(verify.valid_request);
+var usersAuth=[verify.user_log,verify.users_token];
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users',usersAuth, usersRouter);
 app.use('/category',categoryRouter);
 app.use('/posts',postsRouter);
 app.use('/comments',commentRouter);
