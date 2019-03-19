@@ -19,6 +19,7 @@ var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
 var postsRouter=require('./routes/posts');
 var commentRouter=require('./routes/comments');
+var miscRouter=require('./routes/misc');
 var app = express();
 app.use(cors());
 // view engine setup
@@ -30,8 +31,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ limit: '50mb',extended: true }));
-app.use(bodyParser.json({limit: '50mb',extended: true}));
+app.use(bodyParser.urlencoded({ limit: '50mb',extended: true,parameterLimit:50000 }));
+app.use(bodyParser.json({limit: '50mb'}));
 //app.use(verify.valid_request);
 var usersAuth=[verify.user_log,verify.users_token];
 app.use('/', indexRouter);
@@ -39,6 +40,7 @@ app.use('/users',usersAuth, usersRouter);
 app.use('/category',categoryRouter);
 app.use('/posts',postsRouter);
 app.use('/comments',commentRouter);
+app.use('/misc',miscRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
