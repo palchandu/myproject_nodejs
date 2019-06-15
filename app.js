@@ -20,6 +20,7 @@ var categoryRouter = require('./routes/category');
 var postsRouter=require('./routes/posts');
 var commentRouter=require('./routes/comments');
 var miscRouter=require('./routes/misc');
+
 var app = express();
 app.use(cors());
 // view engine setup

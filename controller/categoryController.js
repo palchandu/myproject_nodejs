@@ -15,8 +15,10 @@ categoryController.add_category=function(req,res){
             }
         }else{
             cateArray=new Category({
-                name:req.body.name
+                name:req.body.name,
+                metaData:{created_by:'12345'}
             });
+            console.log(cateArray);
             cateArray.save().then(function(result){
                 res.json({
                     status:"200",
@@ -36,7 +38,7 @@ categoryController.add_category=function(req,res){
 
 /*Find Category List */
 categoryController.cate_list=function(req,res){
-    Category.find({deleted:"N"},{name:1,_id:1,created:1}).exec().then(function(result){
+    Category.find({"metaData.deleted":"N"},'name').exec().then(function(result){
         if(result!=null){
             //res.json({status:200,message:"List of all categories",data:result});
             res.json(result);
