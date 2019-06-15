@@ -1,7 +1,7 @@
 var jwt=require('jsonwebtoken');
 var bcrypt=require('bcryptjs');
 var Users=require('../model/userModel');
-userController={};
+var userController = {};
 
 userController.register=function(req,res){
     Users.count({email:req.body.email}).exec().then(function(result){

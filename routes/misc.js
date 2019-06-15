@@ -7,4 +7,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/add_profile',miscController.add_details);
+router.get('/get_profile',miscController.find_details);
+router.post('/update_profile',miscController.update_profile);
 module.exports = router;

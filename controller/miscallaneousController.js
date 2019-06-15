@@ -3,53 +3,48 @@ var Misc=require('../model/miscallaneous');
 var miscController={};
 
 miscController.add_details=function(req,res){
-    const storage = multer.diskStorage({
-        destination: (req, file, callback) => {
-            callback(null, './public/images');
-        },
-        filename: (req, file, callback) => {
-            callback(null, Date.now() + '-' + file.originalname);
-        }
+    
+    profilArray=new Misc({
+        name:req.body.name,
+        designation:req.body.designation,
+        organisation:req.body.organisation,
+        image:req.body.image,
+        copyright:req.body.copyright
     });
-
-    const upload = multer({storage: storage}).any('file');
-
-    upload(req, res, (err) => {
-        if (err) {
-            return res.status(400).send({
-                message: helper.getErrorMessage(err)
-            });
-        }
-        let results = req.files.map((file) => {
-            return {
-                mediaName: file.filename,
-                origMediaName: file.originalname,
-                mediaSource: 'http://' + req.headers.host + '/public/images/' + file.filename
-            }
+    profilArray.save().then(function(result1){
+        res.json({
+            status:"200",
+            message:"Profile updated",
+            data:result1
         });
-        profilArray=new Misc({
-            name:req.body.name,
-            designation:req.body.designation,
-            organisation:req.body.organisation,
-            image:results[0].mediaSource,
-            copyright:req.body.copyright
-        });
-
-        res.json(profilArray);
-        profilArray.save().then(function(result1){
-            res.json({
-                status:"200",
-                message:"Profile updated",
-                data:result1
-            });
-        }).catch(function(error){
-            res.status(201).json({
-                message:"Something wrong!try again"
-            })
-        });
-       
+    }).catch(function(error){
+        res.status(201).json({
+            message:"Something wrong!try again",
+            error:error
+        })
     });
+}
 
+miscController.find_details=function(req,res){
+    Misc.find({}).exec().then(function(result){
+        res.json(result);
+    }).catch(function(error){
+        res.json({status:202,message:"Something wrong!"});
+    })
+}
+
+miscController.update_profile=function(req,res){
+    updt_query={name:req.body.name,
+                designation:req.body.designation,
+                organisation:req.body.organisation,
+                image:req.body.image,
+                copyright:req.body.copyright
+                }
+    Misc.findOneAndUpdate({_id:req.body._id},updt_query).then(function(result){
+        res.json({status:200,message:"Updated Successfully",data:result});
+    }).catch(function(error){
+        res.json({status:202,message:"something wrong",error:error});
+    })
 }
 
 module.exports=miscController;
