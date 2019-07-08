@@ -2,11 +2,12 @@ var mongoos=require('mongoose');
 var Schema=mongoos.Schema;
 var commonModel=require('./commonModel');
 var personalAndWebsite=new Schema({
-    name:{ type:String,minlength:3},
+    fullName:{ type:String,minlength:3},
     designation:{ type:String},
     organisation:{ type:String},
     image:{ type:String},
-    copyright:{ type:String}
+    copyright:{ type:String},
+    role:{ type:String,default:'admin'}
 });
 
 var country_state_city=new Schema({

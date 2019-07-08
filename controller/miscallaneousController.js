@@ -1,52 +1,91 @@
-var multer  = require('multer');
 var Misc=require('../model/miscallaneous');
-var CommonModel=require('../model/commonModel');
 var miscController={};
 var google=require('../utility/index');
 miscController.add_details=function(req,res){
     
-    profilArray=new Misc({
-        name:req.body.name,
-        designation:req.body.designation,
-        organisation:req.body.organisation,
-        image:req.body.image,
-        copyright:req.body.copyright
-    });
-    profilArray.save().then(function(result1){
-        res.json({
-            status:"200",
-            message:"Profile updated",
-            data:result1
-        });
-    }).catch(function(error){
-        res.status(201).json({
-            message:"Something wrong!try again",
-            error:error
-        })
-    });
+    Misc.personal.findOne({role:'admin'}).exec().then((response)=>{
+       if(response==null){
+        if(req.body.flage=='basic_update'){
+            profilArray=new Misc.personal({
+                fullName:req.body.fullName,
+                designation:req.body.designation,
+                organisation:req.body.organisation,
+                image:req.body.image,
+                copyright:req.body.copyright
+            });
+            profilArray.save().then(function(result1){
+                res.json({
+                    status:"200",
+                    message:"Profile updated",
+                    data:result1
+                });
+            }).catch(function(error){
+                res.status(201).json({
+                    message:"Something wrong!try again",
+                    error:error
+                })
+            });
+        }else{
+            res.status(201).json({
+                message:"First update profile basic details"
+            })
+        }
+       }
+       else{
+            if(req.body.flage=='basic_update'){
+                var fullname=req.body.fullName;
+                var designation=req.body.designation;
+                var organisation=req.body.organisation;
+                Misc.personal.update({role:'admin'},{$set:{"fullName":fullname,"designation":designation,"organisation":organisation}}).exec().then((response)=>{
+                    res.json({
+                        status:"200",
+                        message:"Basic Information Updated Successfully",
+                        data:response
+                    });
+                }).catch((error)=>{
+                    res.status(201).json({message:'Something wrong to update basic information',error:error});
+                })
+            }
+            if(req.body.flage=='picture_update'){
+                var image=req.body.image;
+                Misc.personal.update({role:'admin'},{$set:{"image":image}}).exec().then((response)=>{
+                    res.json({
+                        status:"200",
+                        message:"Profile Picture Updated Successfully",
+                        data:response
+                    });
+                }).catch((error)=>{
+                    res.status(201).json({message:'Something wrong to update profile picture',error:error});
+                })
+            }
+            if(req.body.flage=='copyright_update'){
+                var copyright=req.body.copyright;
+                Misc.personal.update({role:'admin'},{$set:{"copyright":copyright}}).exec().then((response)=>{
+                    res.json({
+                        status:"200",
+                        message:"Copyright Updated Successfully",
+                        data:response
+                    });
+                }).catch((error)=>{
+                    res.status(201).json({message:'Something wrong to update copyright',error:error});
+                })
+            }
+
+       }
+    }).catch((error)=>{
+        res.status(201).json({message:'Something Wrong to find profile',error:error});
+    })
+    
 }
 
 miscController.find_details=function(req,res){
-    Misc.find({}).exec().then(function(result){
-        res.json(result);
+    Misc.personal.findOne({role:'admin'}).exec().then(function(result){
+        res.status(200).json(result);
     }).catch(function(error){
         res.json({status:202,message:"Something wrong!"});
     })
 }
 
-miscController.update_profile=function(req,res){
-    updt_query={name:req.body.name,
-                designation:req.body.designation,
-                organisation:req.body.organisation,
-                image:req.body.image,
-                copyright:req.body.copyright
-                }
-    Misc.findOneAndUpdate({_id:req.body._id},updt_query).then(function(result){
-        res.json({status:200,message:"Updated Successfully",data:result});
-    }).catch(function(error){
-        res.json({status:202,message:"something wrong",error:error});
-    })
-}
 miscController.getFiles=function(req,res){
     var files=google.getFile();
     res.json({file:files});

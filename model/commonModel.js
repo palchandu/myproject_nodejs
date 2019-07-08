@@ -1,6 +1,7 @@
 var mongoose=require('mongoose');
 var Schema=mongoose.Schema;
 var subDocs=require('./subDocsModel');
+
 var gallerySchema=new Schema({
     imageName:{ type:String,required:true},
     imagePath:{ type:String,required:true},
@@ -8,10 +9,6 @@ var gallerySchema=new Schema({
 });
 
 var Gallery=mongoose.model('Gallery',gallerySchema);
-
-module.exports={
-Gallery:Gallery
-};
 
 var metaData=new Schema({
     deleted: { type: String,default: 'N'}, //Y=Deleted and N for not deleted
@@ -33,9 +30,11 @@ var states=new Schema({
 
 
 
+
 module.exports={
     metaData:metaData,
     states:states,
-    cities:cities
+    cities:cities,
+    Gallery:Gallery
 }
 

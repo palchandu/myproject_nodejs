@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/add_profile',miscController.add_details);
 router.get('/get_profile',miscController.find_details);
-router.post('/update_profile',miscController.update_profile);
+
 
 router.get('/get_files',miscController.getFiles);
 router.post('/add_country',miscController.add_country);
