@@ -92,7 +92,7 @@ commonController.multiple_image_upload=async function(req,res){
 }
 
 commonController.getImage=function(req,res){
-    commomModel.Gallery.find({deleted:'N'}).then((result)=>{
+    commomModel.Gallery.find({"meta_data.deleted":'N'},'imagePath').then((result)=>{
         res.json({status:200,data:result});
     }).catch((error)=>{
         res.json({status:201,data:error});
